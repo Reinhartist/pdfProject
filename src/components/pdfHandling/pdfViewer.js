@@ -16,12 +16,9 @@ export default class Viewer extends Component {
             width: "1000px"
         }
         if (this.props.pdf) {
-            let A = [];
-            for (let i = 0; i < numPages; i++) A[i] = i;
-
             return (
                 <div style={pdfStyle}>
-                    {A.map((v, i) => this.showPage(i))}
+                    {Array(numPages).fill(0).map((v, i) => i).map((v, i) => this.showPage(i))}
                 </div>
             );
         }

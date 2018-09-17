@@ -6,6 +6,18 @@ class Queries {
         this.db = db;
     }
 
+    findById(id) {
+        return new Promise((resolve, reject) => {
+            let o_id = new mongodb.ObjectID(id);
+            try {
+                resolve(this.db.collection('fs.files').findOne({_id: o_id}));
+            } catch (e) {
+                console.log(e);
+                reject(new Error("Something went wrong"));
+            }
+        });
+    }
+
     handleFind(req) {
         let regex = new RegExp(req.params.props, "i");
         return new Promise((resolve, reject) => {
@@ -33,8 +45,11 @@ class Queries {
         let bucket = new mongodb.GridFSBucket(this.db);
         return new Promise((resolve, reject) => {
             try {
-                resolve(fs.createReadStream(req.files.load.file)
-                    .pipe(bucket.openUploadStream(req.body.filename)).id);
+                let inStream = fs.createReadStream(req.files.load.file);
+                let outStream = bucket.openUploadStream(req.body.filename);
+                let id = inStream.pipe(outStream).id;
+
+                outStream.once('finish', () => resolve(id));
             } catch (e) {
                 console.log(e);
                 reject(new Error("Something went wrong"));

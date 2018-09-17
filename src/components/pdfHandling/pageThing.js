@@ -9,6 +9,7 @@ export default class Page extends Component {
             width: 0,
             height: 0
         };
+        this.canvas = React.createRef();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -20,20 +21,11 @@ export default class Page extends Component {
     }
 
     componentDidMount() {
-        const { pdf } = this.props;
-        this._update(pdf);
+        this._update(this.props.pdf);
     }
 
-    setCanvasRef = (canvas) => {
-        this.canvas = canvas;
-    };
-
-    _update = (pdf) => {
-        if (pdf) {
-            this._loadPage(pdf);
-        } else {
-            this.setState({ status: 'loading' });
-        }
+    _update(pdf) {
+        pdf ? this._loadPage(pdf) : this.setState({ status: 'loading' });
     };
 
     _loadPage(pdf) {
@@ -48,28 +40,22 @@ export default class Page extends Component {
     }
 
     _renderPage(page) {
-        let { scale } = this.props;
-        let viewport = page.getViewport(scale);
-        let { width, height } = viewport;
-        let canvas = this.canvas;
-        let context = canvas.getContext('2d');
-        canvas.width = width;
-        canvas.height = height;
+        let viewport = page.getViewport(this.props.scale);
+        this.canvas.width = viewport.width;
+        this.canvas.height = viewport.height;
 
         page.render({
-            canvasContext: context,
+            canvasContext: this.canvas.getContext('2d'),
             viewport
         });
 
-        this.setState({ status: 'rendered', page, width, height });
+        this.setState({ status: 'rendered', page: page, width: viewport.width, height: viewport.height });
     }
 
     render() {
-        let { width, height } = this.state;
-
         return (
-            <div style={{ width, height }}>
-                <canvas ref={this.setCanvasRef} />
+            <div style={{ width: this.state.width, height: this.state.height }}>
+                <canvas ref={(canvas) => this.canvas = canvas} />
             </div>
         );
     }

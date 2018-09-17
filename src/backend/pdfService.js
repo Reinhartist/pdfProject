@@ -17,9 +17,11 @@ class pdfService {
 
     async create(req, res) {
         let result;
+        let id;
 
         try {
-            result = await this.queries.handleCreate(req);
+            id = await this.queries.handleCreate(req);
+            result = await this.queries.findById(id);
         } catch (e) {
             result = e.message;
         }
