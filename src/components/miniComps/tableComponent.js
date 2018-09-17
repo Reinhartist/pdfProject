@@ -74,7 +74,7 @@ export default class tableComponent extends Component {
                                     {result.chunkSize}
                                 </td>
                                 <td>
-                                    {result.uploadDate}
+                                    {(new Date(result.uploadDate)).toString()}
                                 </td>
                                 <td>
                                     {JSON.stringify(result.meta)}
