@@ -7,8 +7,8 @@ export default class Navibar extends React.Component {
     render() {
         return (
             <Navbar color="light" light expand="md">
-                <NavbarBrand><Link to="/"> PDFManager </Link> </NavbarBrand>
-                <NavbarBrand><Link to="/login"> Login </Link> </NavbarBrand>
+                <NavbarBrand tag={Link} to="/"> PDFManager  </NavbarBrand>
+                <NavbarBrand tag={Link} to="/login"> Login </NavbarBrand>
             </Navbar>
         );
     }
