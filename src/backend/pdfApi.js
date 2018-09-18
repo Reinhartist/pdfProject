@@ -26,8 +26,8 @@ mongodb.MongoClient.connect('mongodb://localhost', { useNewUrlParser: true }, (e
     pdfResults = new pdfService(db);
 });
 
-app.get('/find/:prop/:props', (req, res) => pdfResults.find(req, res));
+app.get('/find/:prop/:props/:date', (req, res) => pdfResults.find(req, res));
 app.post('/create', (req, res) => pdfResults.create(req, res));
 app.get('/read/:id', (req, res) => pdfResults.read(req, res));
-app.put('/update/:id', (req, res) => pdfResults.update(req, res));
+app.post('/update/:id', (req, res) => pdfResults.update(req, res));
 app.delete('/delete/:id', (req, res) => pdfResults.delete(req, res));

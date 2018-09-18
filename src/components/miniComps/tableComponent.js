@@ -28,7 +28,7 @@ export default class tableComponent extends Component {
         document.getElementById("filename").value = "";
     }
     fileSearch() {
-        axios.get(BASE_URL + "find/filename/" + document.getElementById("fileSearch").value)
+        axios.get(BASE_URL + "find/filename/" + document.getElementById("fileSearch").value + "/forever")
             .then(res => this.setState({results: res.data}));
     }
     fileDelete(id, index) {

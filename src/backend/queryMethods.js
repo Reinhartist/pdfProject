@@ -19,10 +19,13 @@ class Queries {
     }
 
     handleFind(req) {
-        let regex = new RegExp(req.params.props, "i");
+        let regex;
+        if (req.params.props ==='pdf') regex = new RegExp("", "i");
+        else regex = new RegExp(req.params.props, "i");
+
         return new Promise((resolve, reject) => {
             try {
-                let query = { $or: []}
+                let query = { $or: [], uploadDate: {$gte : new Date(req.params.date)}}
 
                 let arrayQuery = {}
                 arrayQuery[req.params.prop] = {$elemMatch: {$regex: regex }}
@@ -32,6 +35,10 @@ class Queries {
 
                 query['$or'].push(arrayQuery);
                 query['$or'].push(stringQuery);
+
+                let dateQuery = {}
+                //dateQuery['uploadDate']
+                console.log(query);
 
                 resolve(this.db.collection('fs.files').find(query).sort({ uploadDate: -1 }));
             } catch (e) {
@@ -48,7 +55,6 @@ class Queries {
                 let inStream = fs.createReadStream(req.files.load.file);
                 let outStream = bucket.openUploadStream(req.body.filename);
                 let id = inStream.pipe(outStream).id;
-
                 outStream.once('finish', () => resolve(id));
             } catch (e) {
                 console.log(e);
@@ -89,7 +95,7 @@ class Queries {
         let o_id = new mongodb.ObjectID(req.params.id);
         return new Promise((resolve, reject) => {
             try {
-                resolve(this.db.collection('fs.files').updateOne({ _id: o_id }, { $set: { meta: JSON.parse(req.body.meta) } }));
+                resolve(this.db.collection('fs.files').updateOne({ _id: o_id }, { $set: { filename: req.body.filename, meta: JSON.parse(req.body.meta) } }));
             } catch (e) {
                 console.log(e);
                 reject(new Error("Something went wrong"));
