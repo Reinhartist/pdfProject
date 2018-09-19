@@ -10,11 +10,13 @@ export default class tableComponent extends Component {
         this.state = {
             pdf: null,
             scale: 1.5,
-            results: []
+            results: [],
         };
+        this.editingFile = null;
         this.fileSearch = this.fileSearch.bind(this);
         this.fileDelete = this.fileDelete.bind(this);
         this.filePost = this.filePost.bind(this);
+        this.metaPost = this.metaPost.bind(this);
     }
     filePost() {
         let formData = new FormData();
@@ -37,6 +39,28 @@ export default class tableComponent extends Component {
             this.setState({results: this.state.results});
         });
     }
+    beginEdit(id, index) {
+        this.editingFile = id;
+        this.editIndex = index;
+        document.getElementById("updateFileName").value = this.state.results[index].filename;
+        document.getElementById("meta").value = JSON.stringify(this.state.results[index].meta);
+    }
+    metaPost() {
+        let formData = new FormData();
+        formData.append("filename", document.getElementById("updateFileName").value);
+        formData.append("meta", document.getElementById("meta").value);
+        axios.post(BASE_URL + "update/" + this.editingFile, formData).then(res => {
+            
+            let r = this.state.results[this.editIndex];
+            r.meta = JSON.parse(document.getElementById("meta").value);
+            r.filename = document.getElementById("updateFileName").value;
+
+            this.state.results.splice(this.editIndex, 1, r)
+
+            this.setState({results: this.state.results});
+        });
+    }
+
     render() {
         return (
             <div className = "table">
@@ -52,13 +76,20 @@ export default class tableComponent extends Component {
                     <Button bsSize = "small" bsStyle = "primary"
                             onClick = {this.fileSearch}>Search</Button>
                 </div>
+                <Form inline>
+                    <FormGroup>
+                        <FormControl id="updateFileName" name="updateFileName" />
+                        <FormControl id="meta" name="meta" />
+                        <Button onClick={this.metaPost}>Update</Button>
+                    </FormGroup>
+                </Form>
                     <Table responsive striped bordered hover>
                     <thead>
                     <tr>
                         <th>Title</th>
                         <th>File Size</th>
                         <th>Upload Date</th>
-                        <th>Tags</th>
+                        <th>Meta</th>
                         <th>View</th>
                         <th>Delete</th>
                     </tr>
@@ -78,14 +109,15 @@ export default class tableComponent extends Component {
                                 </td>
                                 <td>
                                     {JSON.stringify(result.meta)}
+                                    <Button onClick = {() => this.beginEdit(result._id, index)}>Edit</Button>
                                 </td>
                                 <td>
                                     <Link to={"/fileRead/" + result._id} > View </Link>
                                 </td>
                                 <td>
-                                    <button onClick={() => this.fileDelete(result._id, index)}>
+                                    <Button onClick={() => this.fileDelete(result._id, index)}>
                                         Delete
-                                    </button>
+                                    </Button>
                                 </td>
                             </tr>
                         )
