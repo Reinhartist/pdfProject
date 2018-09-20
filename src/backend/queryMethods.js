@@ -32,9 +32,13 @@ class Queries {
 
                 let stringQuery = {}
                 stringQuery[req.params.prop] = {$regex: regex}
+                
+                let intQuery = {}
+                intQuery[req.params.prop] = {$lte : parseInt(req.params.props)}
 
                 query['$or'].push(arrayQuery);
                 query['$or'].push(stringQuery);
+                query['$or'].push(intQuery);
 
                 let dateQuery = {}
                 //dateQuery['uploadDate']
