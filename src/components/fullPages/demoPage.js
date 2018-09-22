@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import * as PdfJs from 'pdfjs-dist';
+import * as PdfJs from 'pdfjs-dist/webpack';
 import Viewer from '../pdfHandling/pdfViewer';
 import Navibar from "../miniComps/navbar";
 
