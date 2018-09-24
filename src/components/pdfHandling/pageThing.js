@@ -66,11 +66,9 @@ export default class Page extends Component {
 
     render() {
         return (
-            <div id={`pageContainer${this.props.index}`} data-loaded="true"
-                 data-page-number={this.props.index} className="page"
-                 style={{width: this.state.width, height: this.state.height}}>
+            <div className="page" style={{width: this.state.width, height: this.state.height}}>
                 <div className="canvasWrapper">
-                    <canvas id={`page${this.props.index}`} ref={(canvas) => this.canvas = canvas}/>
+                    <canvas ref={(canvas) => this.canvas = canvas}/>
                 </div>
                 <div className="textLayer" ref={(div) => this.textLayer = div}/>
             </div>

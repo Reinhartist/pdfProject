@@ -12,7 +12,7 @@ export default class Viewer extends Component {
         const numPages = this.props.pdf ? this.props.pdf.pdfInfo.numPages : 0;
         if (this.props.pdf) {
             return (
-                <div id="viewer" className="pdfViewer">
+                <div className="pdfViewer">
                     {Array(numPages).fill(0).map((v, i) => i).map((v, i) => this.showPage(i))}
                 </div>
             );
