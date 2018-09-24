@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Page from './pageThing';
+import './pdfCSS.css'
 
 export default class Viewer extends Component {
 
@@ -9,15 +10,9 @@ export default class Viewer extends Component {
 
     render() {
         const numPages = this.props.pdf ? this.props.pdf.pdfInfo.numPages : 0;
-        const pdfStyle = {
-            overflowY: "scroll",
-            position: "relative",
-            height: "400px",
-            width: "1000px"
-        }
         if (this.props.pdf) {
             return (
-                <div style={pdfStyle}>
+                <div id="viewer" className="pdfViewer">
                     {Array(numPages).fill(0).map((v, i) => i).map((v, i) => this.showPage(i))}
                 </div>
             );

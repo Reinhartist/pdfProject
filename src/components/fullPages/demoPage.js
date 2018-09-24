@@ -10,7 +10,7 @@ export default class Demo extends Component {
         super(props);
         this.state = {
             pdf: null,
-            scale: 1.5,
+            scale: 1,
             results: []
         };
     }
